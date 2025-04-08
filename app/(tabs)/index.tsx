@@ -17,7 +17,8 @@ export default function HomeScreen() {
               Home
             </Text>
           </View>
-          <Text>Pramit 21951900.</Text>
+          <Text>Pramit 21951900</Text>
+          <Text>Mehul Kaushal 21522464</Text>
         </View>
       </SafeAreaView>
     </SafeAreaProvider>
