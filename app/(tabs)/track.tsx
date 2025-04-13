@@ -1,27 +1,23 @@
 import { StyleSheet, Image, Platform, View, Text } from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { styles } from "../../Styles/servicesPage";
 
 export default function TabTwoScreen() {
   return (
-    <View className="main" style={styles.main}>
-      <Text className="initial" style={styles.initial}>
-        This is the order tracking page.
-      </Text>
-    </View>
+    <SafeAreaProvider>
+      <SafeAreaView style={{ flex: 1 }}>
+        <View className="main" style={styles.main}>
+          <View className="sub_heading" style={styles.sub_heading}>
+            <Text className="sub_heading_text" style={styles.sub_heading_text}>
+              Track your order
+            </Text>
+          </View>
+          <Text className="initial" style={styles.initial}>
+            This is the order tracking page.
+          </Text>
+        </View>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  main: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f5f5f5",
-  },
-  initial: {
-    fontSize: 20,
-    color: "orange",
-    fontWeight: "bold",
-    textAlign: "center",
-    margin: 10,
-  },
-});
