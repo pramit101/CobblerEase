@@ -12,8 +12,8 @@ import React, { useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "../../Styles/browsePage";
-import { products } from "../../data/products";
-import { ImageBox } from "../../helperFiles/imageBox";
+import { services } from "../../data/services";
+import { Service_image_box } from "../../helperFiles/service_image_box";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { FlatList } from "react-native-gesture-handler";
 import { StatusBar } from "react-native";
@@ -22,8 +22,8 @@ export default function TabTwoScreen() {
   const tabBarHeight = useBottomTabBarHeight();
   const [query, setQuery] = useState("");
 
-  const filteredProducts = products.filter((product) =>
-    product.product_name.toLowerCase().includes(query.toLowerCase())
+  const filteredProducts = services.filter((service) =>
+    service.service_name.toLowerCase().includes(query.toLowerCase())
   );
 
   return (
@@ -31,11 +31,11 @@ export default function TabTwoScreen() {
       <View className="main" style={styles.main}>
         <View className="sub_heading" style={styles.sub_heading}>
           <Text className="sub_heading_text" style={styles.sub_heading_text}>
-            Browse Products
+            Services
           </Text>
         </View>
         <TextInput
-          placeholder={"Enter the name of the product"}
+          placeholder={"Enter the name of the service"}
           value={query}
           onChangeText={setQuery}
           style={styles.searchBar}
@@ -46,16 +46,14 @@ export default function TabTwoScreen() {
         >
           <FlatList
             data={filteredProducts}
-            keyExtractor={(item) => item.product_id}
+            keyExtractor={(item) => item.service_id}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
-              <ImageBox
-                key={item.product_id}
-                id={item.product_id}
-                name={item.product_name}
-                image={item.product_image}
-                description={item.product_description}
-                price={item.product_price}
+              <Service_image_box
+                key={item.service_id}
+                name={item.service_name}
+                image={item.service_image}
+                description={item.service_description}
               />
             )}
           />
