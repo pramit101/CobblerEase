@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { View, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import React, { useState } from "react";
+import { View, TextInput, Button, Alert, StyleSheet } from "react-native";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleLogin = () => {
     console.log("handleLogin called");
@@ -15,7 +15,9 @@ const LoginPage = () => {
     }
 
     try {
-      console.log(`Attempting login with Email: ${email}, Password: ${password}`);
+      console.log(
+        `Attempting login with Email: ${email}, Password: ${password}`
+      );
       // Simulate successful login
       console.log("Login successful!");
       Alert.alert("Success", "You are logged in!");
@@ -56,15 +58,15 @@ const LoginPage = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    justifyContent: 'center',
+    justifyContent: "center",
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   input: {
     marginBottom: 12,
     padding: 10,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 5,
   },
 });
