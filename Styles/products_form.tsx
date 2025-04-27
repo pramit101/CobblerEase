@@ -1,0 +1,53 @@
+import { StyleSheet } from "react-native";
+
+export const styles = StyleSheet.create({
+  main: {
+    flex: 1,
+    padding: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f5f5f5",
+  },
+  myText: {
+    fontSize: 12,
+    width: "85%",
+    fontWeight: "bold",
+    backgroundColor: "#eef",
+    color: "#000",
+    textAlign: "center",
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
+    margin: 10,
+  },
+  textHeader: {
+    fontSize: 10,
+    textDecorationLine: "underline",
+    fontWeight: "bold",
+    fontFamily: "space-mono",
+    color: "#000",
+    textAlign: "center",
+    marginBottom: 10,
+    marginTop: 10,
+  },
+  buttons_view: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    margin: 10,
+    width: "100%",
+    padding: 20,
+    color: "white",
+  },
+  buttons: {
+    backgroundColor: "#633a24",
+    padding: 10,
+    fontFamily: "arial",
+    color: "white",
+    fontSize: 15,
+    fontWeight: "bold",
+    borderRadius: 20,
+    width: "100%",
+    marginLeft: 10,
+    textAlign: "center",
+  },
+});

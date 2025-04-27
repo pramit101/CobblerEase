@@ -1,7 +1,7 @@
 import { Tabs } from "expo-router";
 import React from "react";
 import { Platform } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 import { HapticTab } from "@/components/HapticTab";
 import { IconSymbol } from "@/components/ui/IconSymbol";
@@ -40,9 +40,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="browse"
         options={{
-          title: "Browse products",
+          title: "Products",
           tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="search" size={size} color={color} />
+            <FontAwesome5 name="search" size={size} color={color} />
           ),
         }}
       />
@@ -51,7 +51,7 @@ export default function TabLayout() {
         options={{
           title: "Services",
           tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="wrench" size={size} color={color} />
+            <FontAwesome5 name="wrench" size={size} color={color} />
           ),
         }}
       />
@@ -60,7 +60,16 @@ export default function TabLayout() {
         options={{
           title: "Track Order",
           tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="question-circle" size={size} color={color} />
+            <FontAwesome5 name="question-circle" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Cart"
+        options={{
+          title: "Cart",
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome5 name="shopping-cart" size={size} color={color} />
           ),
         }}
       />

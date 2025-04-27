@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase"; // ✅ Updated import path
+import { auth } from "../firebase";
+import { router } from "expo-router";
 
 const SignupPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSignup = async () => {
     if (password !== confirmPassword) {
@@ -49,6 +50,12 @@ const SignupPage = () => {
         secureTextEntry
       />
       <Button title="Sign Up" onPress={handleSignup} />
+      <Button
+        title="Already have an account?"
+        onPress={() => {
+          router.push("./login_page");
+        }}
+      />
     </SafeAreaView>
   );
 };
@@ -57,21 +64,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    justifyContent: "center"
+    justifyContent: "center",
   },
   heading: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
-    textAlign: "center"
+    textAlign: "center",
   },
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
     marginBottom: 15,
     padding: 10,
-    borderRadius: 5
-  }
+    borderRadius: 5,
+  },
 });
 
 export default SignupPage;

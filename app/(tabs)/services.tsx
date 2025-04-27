@@ -17,9 +17,15 @@ import { Service_image_box } from "../../helperFiles/service_image_box";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { FlatList } from "react-native-gesture-handler";
 import { StatusBar } from "react-native";
+import { router } from "expo-router";
 
-export default function TabTwoScreen() {
-  const tabBarHeight = useBottomTabBarHeight();
+export default function ServicesScreen() {
+  // This is the main screen for browsing services
+  // It contains a search bar and a list of services
+  // The services are filtered based on the search query
+  // The user can click on a service to view its details
+
+  const tabBarHeight = useBottomTabBarHeight(); // Get the height of the tab bar so that we can adjust the padding of the service list
   const [query, setQuery] = useState("");
 
   const filteredProducts = services.filter((service) =>
@@ -34,7 +40,7 @@ export default function TabTwoScreen() {
             Services
           </Text>
         </View>
-        <TextInput
+        <TextInput // Search bar to filter services
           placeholder={"Enter the name of the service"}
           value={query}
           onChangeText={setQuery}
@@ -49,12 +55,27 @@ export default function TabTwoScreen() {
             keyExtractor={(item) => item.service_id}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
-              <Service_image_box
-                key={item.service_id}
-                name={item.service_name}
-                image={item.service_image}
-                description={item.service_description}
-              />
+              <TouchableOpacity
+                onPress={() => {
+                  router.push({
+                    pathname: "/service_form",
+                    params: {
+                      service_name: item.service_name,
+                      service_description: item.service_description,
+                      service_image: item.service_image,
+                    },
+                  });
+                }}
+                style={{ display: "flex", width: "30%" }}
+              >
+                <Service_image_box // Using a custom component (look inside helperFiles)
+                  //  to display the product details in organized cards form.
+                  key={item.service_id}
+                  name={item.service_name}
+                  image={item.service_image}
+                  description={item.service_description}
+                />
+              </TouchableOpacity>
             )}
           />
         </View>

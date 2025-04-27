@@ -14,7 +14,10 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { router } from "expo-router";
 
 export default function HomeScreen() {
-  const tabBarHeight = useBottomTabBarHeight();
+  // This is the main screen for the app
+  // It contains a logo, a guest account section, and a welcome message
+  // The user can click on the logo to navigate to the login page
+  const tabBarHeight = useBottomTabBarHeight(); // Get the height of the tab bar so that we can adjust the padding of the content
   return (
     <SafeAreaProvider>
       <SafeAreaView style={{ flex: 1 }}>
@@ -29,7 +32,7 @@ export default function HomeScreen() {
             </Text>
             <TouchableOpacity
               onPress={() => {
-                router.push("/login_page");
+                router.push("/signup_page");
               }}
               style={{ display: "flex", width: "30%" }}
             >
@@ -59,12 +62,6 @@ export default function HomeScreen() {
                 looking pristine. Our convenient online platform makes it easy
                 to browse and order products, as well as book services such as
                 shoe repairs, custom fittings, and maintenance.
-              </Text>
-              <Text className="body_text" style={styleText.body_text}>
-                Whether you're a busy professional or a fashion enthusiast,
-                Melbourne Cobbler Co. has got you covered! Join the hundreds of
-                happy customers who trust us with their footwear needs, and let
-                us extend the life of your most cherished shoes.
               </Text>
             </View>
           </ScrollView>

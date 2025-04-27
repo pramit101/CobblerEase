@@ -2,11 +2,12 @@ import { View, Text, Image, ImageSourcePropType } from "react-native";
 import React from "react";
 import { products } from "../data/products";
 import { styles } from "../Styles/imageBox";
+import { imageMap } from "../data/imageMaps";
 
 type ImageBoxProps = {
   id: string;
   name: string;
-  image: ImageSourcePropType;
+  image: string;
   description: string;
   price: number;
 };
@@ -21,7 +22,7 @@ export const ImageBox = ({
   return (
     <View className="main_box" style={styles.main_box}>
       <Image
-        source={image}
+        source={imageMap[image]}
         style={{ width: "100%", height: 200 }}
         resizeMode="stretch"
       />

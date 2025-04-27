@@ -2,10 +2,11 @@ import { View, Text, Image, ImageSourcePropType } from "react-native";
 import React from "react";
 import { products } from "../data/products";
 import { styles } from "../Styles/service_image_box";
+import { imageMap } from "../data/imageMaps";
 
 type ImageBoxProps = {
   name: string;
-  image: ImageSourcePropType;
+  image: string;
   description: string;
 };
 
@@ -20,7 +21,7 @@ export const Service_image_box = ({
         SERVICE
       </Text>
       <Image
-        source={image}
+        source={imageMap[image]}
         style={{
           width: "90%",
           height: 150,
