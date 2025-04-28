@@ -7,6 +7,7 @@ import { router } from "expo-router";
 
 const SignupPage = () => {
   const [email, setEmail] = useState("");
+  const [Name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -34,6 +35,13 @@ const SignupPage = () => {
         onChangeText={setEmail}
         autoCapitalize="none"
         keyboardType="email-address"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Name"
+        value={Name}
+        onChangeText={setName}
+        autoCapitalize="none"
       />
       <TextInput
         style={styles.input}
