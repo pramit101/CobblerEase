@@ -1,28 +1,67 @@
 import {
   Image,
   StyleSheet,
-  Platform,
   View,
   Text,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "../../Styles/homePage";
-import { FontAwesome } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { router } from "expo-router";
+import MapView, { Marker } from "react-native-maps";
+import { auth } from "../../firebase";
+import { useState, useEffect } from "react";
 
 export default function HomeScreen() {
-  // This is the main screen for the app
-  // It contains a logo, a guest account section, and a welcome message
-  // The user can click on the logo to navigate to the login page
-  const tabBarHeight = useBottomTabBarHeight(); // Get the height of the tab bar so that we can adjust the padding of the content
+  const tabBarHeight = useBottomTabBarHeight();
+  const [userName, setUserName] = useState<string | null>(null); // null when not logged in
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user && user.displayName) {
+        const firstName = user.displayName.split(" ")[0];
+        setUserName(firstName);
+      } else {
+        setUserName(null); // Not signed in
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
+  const storeLocation = {
+    latitude: -37.8100,
+    longitude: 144.9620,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+  };
+
+  const handleNamePress = () => {
+    Alert.alert(
+      `${userName}`,
+      "Do you want to logout?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Logout",
+          style: "destructive",
+          onPress: () => {
+            auth.signOut(); // Sign out user
+          },
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
   return (
     <SafeAreaProvider>
       <SafeAreaView style={{ flex: 1 }}>
-        <View className="main" style={styles.main}>
-          <View className="heading" style={styles.heading}>
+        <View style={styles.main}>
+          <View style={styles.heading}>
             <Image
               source={require("../../assets/images/main_logo.png")}
               style={{ width: "50%", height: 200 }}
@@ -30,39 +69,70 @@ export default function HomeScreen() {
             <Text style={{ fontWeight: "300", fontSize: 25, marginBottom: 10 }}>
               |
             </Text>
-            <TouchableOpacity
-              onPress={() => {
-                router.push("/signup_page");
-              }}
-              style={{ display: "flex", width: "30%" }}
-            >
-              <View className="account_section" style={styles.account_section}>
-                <Text className="heading_text" style={styles.heading_text}>
-                  Guest{" "}
+
+            {/* ✅ Show name button or Login/Signup options */}
+            {userName ? (
+              <TouchableOpacity
+                onPress={handleNamePress}
+                style={{
+                  marginTop: 10,
+                  backgroundColor: "#007AFF",
+                  padding: 10,
+                  borderRadius: 5,
+                  alignSelf: "center",
+                }}
+              >
+                <Text style={{ color: "white", fontWeight: "bold" }}>
+                  {userName}
                 </Text>
-                <FontAwesome name="user-circle" size={30} color="black" />
+              </TouchableOpacity>
+            ) : (
+              <View style={{ marginTop: 10 }}>
+                <TouchableOpacity
+                  onPress={() => router.push("/login_page")}
+                  style={{
+                    backgroundColor: "#007AFF",
+                    padding: 10,
+                    borderRadius: 5,
+                    marginBottom: 10,
+                  }}
+                >
+                  <Text style={{ color: "white", fontWeight: "bold", textAlign: "center" }}>
+                    Login
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => router.push("/signup_page")}
+                  style={{
+                    backgroundColor: "#007AFF",
+                    padding: 10,
+                    borderRadius: 5,
+                  }}
+                >
+                  <Text style={{ color: "white", fontWeight: "bold", textAlign: "center" }}>
+                    Create Account
+                  </Text>
+                </TouchableOpacity>
               </View>
-            </TouchableOpacity>
+            )}
           </View>
+
           <ScrollView style={{ flex: 1 }}>
-            <View className="body" style={{ paddingBottom: tabBarHeight + 10 }}>
-              <Text className="body_text" style={styleText.body_text}>
+            <View style={{ paddingBottom: tabBarHeight + 10 }}>
+              <Text style={styleText.body_text}>
                 Welcome to Cobbler Ease Co., your local destination for
-                high-quality footwear repairs and custom shoe services! With
-                over 20 years of expertise, we are committed to delivering
-                professional cobbler services that breathe new life into your
-                favorite shoes.
+                high-quality footwear repairs and custom shoe services!
               </Text>
-              <Text className="body_text" style={styleText.body_text}>
-                Whether it's re-soling, stitching, polishing, or restoring your
-                leather items, our skilled artisans provide exceptional care for
-                all types of footwear, bags, and accessories. In addition to
-                repairs, we offer a selection of premium shoe care products,
-                from polishes to waterproofing solutions, to keep your footwear
-                looking pristine. Our convenient online platform makes it easy
-                to browse and order products, as well as book services such as
-                shoe repairs, custom fittings, and maintenance.
-              </Text>
+
+              <View style={{ height: 300, margin: 10 }}>
+                <MapView style={{ flex: 1 }} initialRegion={storeLocation}>
+                  <Marker
+                    coordinate={storeLocation}
+                    title="CobblerEase Store"
+                    description="Find us here!"
+                  />
+                </MapView>
+              </View>
             </View>
           </ScrollView>
         </View>
