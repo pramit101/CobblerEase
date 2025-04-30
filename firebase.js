@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-// Your actual config
+// Configuration object for Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyAKdM23GSzcwqJJKgExW2likyN1SxT8FHM",
   authDomain: "cobblerease.appspot.com",
@@ -15,7 +15,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
-
+ 
 const db = getFirestore(app);
 
 // Export the initialized Firebase app, auth, and Firestore database
