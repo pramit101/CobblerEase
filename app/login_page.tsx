@@ -1,74 +1,99 @@
-import React, { useState } from "react";
-import { View, TextInput, Button, Alert, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
+import { auth } from "../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { router } from "expo-router";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { useState } from "react";
 
-const LoginPage = () => {
+export default function Login_page() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = () => {
-    console.log("handleLogin called");
-
-    if (!email || !password) {
-      console.log("Validation failed: Email or Password is empty");
-      Alert.alert("Error", "Please enter both email and password.");
-      return;
-    }
-
-    try {
-      console.log(
-        `Attempting login with Email: ${email}, Password: ${password}`
-      );
-      // Simulate successful login
-      console.log("Login successful!");
-      Alert.alert("Success", "You are logged in!");
-    } catch (error) {
-      console.log("Login failed:", error);
-      Alert.alert("Login Failed", "Something went wrong. Please try again.");
-    }
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        console.log("User logged in:", userCredential.user);
+        Alert.alert("Success", "Logged in successfully!");
+        router.replace("/"); // ✅ Correct: Send directly to Home
+      })
+      .catch((error) => {
+        console.error("Login error:", error);
+        Alert.alert("Error", error.message);
+      });
   };
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        style={styles.input}
-        autoCapitalize="none"
-        keyboardType="email-address"
-      />
-      <TextInput
-        placeholder="Password"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-        style={styles.input}
-      />
-      <Button
-        title="Login"
-        onPress={() => {
-          console.log("Login button clicked");
-          handleLogin();
-        }}
-      />
-    </View>
+    <SafeAreaProvider>
+      <SafeAreaView style={{ flex: 1, padding: 20 }}>
+        <Text style={styles.title}>Login</Text>
+
+        <TextInput
+          placeholder="Email"
+          style={styles.input}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          onChangeText={setEmail}
+          value={email}
+        />
+        <TextInput
+          placeholder="Password"
+          style={styles.input}
+          secureTextEntry
+          onChangeText={setPassword}
+          value={password}
+        />
+
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => router.push("/signup_page")}
+          style={{ marginTop: 20 }}
+        >
+          <Text style={{ textAlign: "center" }}>
+            Don't have an account?{" "}
+            <Text style={{ fontWeight: "bold" }}>Sign Up</Text>
+          </Text>
+        </TouchableOpacity>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    justifyContent: "center",
-    flex: 1,
-    backgroundColor: "#fff",
+  title: {
+    fontSize: 28,
+    fontWeight: "bold",
+    marginVertical: 20,
+    textAlign: "center",
   },
   input: {
-    marginBottom: 12,
-    padding: 10,
-    borderWidth: 1,
+    height: 50,
     borderColor: "#ccc",
-    borderRadius: 5,
+    borderWidth: 1,
+    marginVertical: 10,
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    fontSize: 16,
+  },
+  button: {
+    backgroundColor: "#007AFF",
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 20,
+  },
+  buttonText: {
+    textAlign: "center",
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 18,
   },
 });
-
-export default LoginPage;
