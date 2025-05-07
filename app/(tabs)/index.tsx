@@ -33,8 +33,8 @@ export default function HomeScreen() {
   }, []);
 
   const storeLocation = {
-    latitude: -37.8100,
-    longitude: 144.9620,
+    latitude: -37.81,
+    longitude: 144.962,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
@@ -89,7 +89,7 @@ export default function HomeScreen() {
             ) : (
               <View style={{ marginTop: 10 }}>
                 <TouchableOpacity
-                  onPress={() => router.push("/login_page")}
+                  onPress={() => router.push("../login_page")}
                   style={{
                     backgroundColor: "#007AFF",
                     padding: 10,
@@ -97,19 +97,31 @@ export default function HomeScreen() {
                     marginBottom: 10,
                   }}
                 >
-                  <Text style={{ color: "white", fontWeight: "bold", textAlign: "center" }}>
+                  <Text
+                    style={{
+                      color: "white",
+                      fontWeight: "bold",
+                      textAlign: "center",
+                    }}
+                  >
                     Login
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => router.push("/signup_page")}
+                  onPress={() => router.push("../signup_page")}
                   style={{
                     backgroundColor: "#007AFF",
                     padding: 10,
                     borderRadius: 5,
                   }}
                 >
-                  <Text style={{ color: "white", fontWeight: "bold", textAlign: "center" }}>
+                  <Text
+                    style={{
+                      color: "white",
+                      fontWeight: "bold",
+                      textAlign: "center",
+                    }}
+                  >
                     Create Account
                   </Text>
                 </TouchableOpacity>

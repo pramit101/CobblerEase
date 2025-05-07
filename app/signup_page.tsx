@@ -1,11 +1,18 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
 import { auth } from "../firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { router } from "expo-router";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 
-export default function SignupPage() {
+export default function Signup_page() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,7 +29,7 @@ export default function SignupPage() {
         await updateProfile(user, { displayName: fullName });
 
         Alert.alert("Success", "Account created!");
-        router.replace("/(tabs)/index"); // ✅ After signup, go to Home
+        router.replace("/"); // ✅ After signup, go to Home
       })
       .catch((error) => {
         console.error("Signup error:", error);
@@ -66,7 +73,8 @@ export default function SignupPage() {
           style={{ marginTop: 20 }}
         >
           <Text style={{ textAlign: "center" }}>
-            Already have an account? <Text style={{ fontWeight: "bold" }}>Login</Text>
+            Already have an account?{" "}
+            <Text style={{ fontWeight: "bold" }}>Login</Text>
           </Text>
         </TouchableOpacity>
       </SafeAreaView>
@@ -75,8 +83,31 @@ export default function SignupPage() {
 }
 
 const styles = StyleSheet.create({
-  title: { fontSize: 28, fontWeight: "bold", marginVertical: 20, textAlign: "center" },
-  input: { height: 50, borderColor: "#ccc", borderWidth: 1, marginVertical: 10, borderRadius: 10, paddingHorizontal: 15, fontSize: 16 },
-  button: { backgroundColor: "#007AFF", padding: 15, borderRadius: 10, marginTop: 20 },
-  buttonText: { textAlign: "center", color: "white", fontWeight: "bold", fontSize: 18 },
+  title: {
+    fontSize: 28,
+    fontWeight: "bold",
+    marginVertical: 20,
+    textAlign: "center",
+  },
+  input: {
+    height: 50,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    marginVertical: 10,
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    fontSize: 16,
+  },
+  button: {
+    backgroundColor: "#007AFF",
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 20,
+  },
+  buttonText: {
+    textAlign: "center",
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 18,
+  },
 });
