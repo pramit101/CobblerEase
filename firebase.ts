@@ -1,5 +1,7 @@
+// src/firebase.ts
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";  // ← added
 
 const firebaseConfig = {
   apiKey: "AIzaSyAKdM23GSzcwqJJKgExW2likyN1SxT8FHM",
@@ -12,4 +14,6 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
 export const auth = getAuth(app);
+export const db   = getFirestore(app);  // ← now available for your orders

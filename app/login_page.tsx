@@ -1,3 +1,6 @@
+// src/screens/LoginPage.tsx
+
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -5,96 +8,137 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  ActivityIndicator,
 } from "react-native";
-import { auth } from "../firebase";
-
+import { SafeAreaView } from "react-native-safe-area-context";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { router } from "expo-router";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { useState } from "react";
+import { auth } from "../firebase";
+import { router, useLocalSearchParams } from "expo-router";
 
-export default function Login_page() {
+export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const { redirect } = useLocalSearchParams<{ redirect?: string }>();
 
   const handleLogin = () => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log("User logged in:", userCredential.user);
+    if (!email.trim() || !password) {
+      Alert.alert("Missing fields", "Please enter both email and password.");
+      return;
+    }
+    setLoading(true);
+
+    signInWithEmailAndPassword(auth, email.trim(), password)
+      .then(({ user }) => {
         Alert.alert("Success", "Logged in successfully!");
-        router.replace("/"); // ✅ Correct: Send directly to Home
+        const target = redirect ?? "/";
+        router.replace(target);
       })
       .catch((error) => {
-        console.error("Login error:", error);
-        Alert.alert("Error", error.message);
+        Alert.alert("Login failed", error.message);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
+  const goToSignUp = () => {
+    const signupPath = redirect
+      ? `/signup_page?redirect=${encodeURIComponent(redirect)}`
+      : "/signup_page";
+    router.push(signupPath);
+  };
+
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1, padding: 20 }}>
-        <Text style={styles.title}>Login</Text>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Login</Text>
 
-        <TextInput
-          placeholder="Email"
-          style={styles.input}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          onChangeText={setEmail}
-          value={email}
-        />
-        <TextInput
-          placeholder="Password"
-          style={styles.input}
-          secureTextEntry
-          onChangeText={setPassword}
-          value={password}
-        />
+      <TextInput
+        placeholder="Email"
+        style={styles.input}
+        keyboardType="email-address"
+        autoCapitalize="none"
+        editable={!loading}
+        onChangeText={setEmail}
+        value={email}
+      />
 
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+      <TextInput
+        placeholder="Password"
+        style={styles.input}
+        secureTextEntry
+        editable={!loading}
+        onChangeText={setPassword}
+        value={password}
+      />
+
+      <TouchableOpacity
+        style={[styles.button, loading && styles.buttonDisabled]}
+        onPress={handleLogin}
+        disabled={loading}
+      >
+        {loading ? (
+          <ActivityIndicator color="#fff" />
+        ) : (
           <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
+        )}
+      </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={() => router.push("/signup_page")}
-          style={{ marginTop: 20 }}
-        >
-          <Text style={{ textAlign: "center" }}>
-            Don't have an account?{" "}
-            <Text style={{ fontWeight: "bold" }}>Sign Up</Text>
-          </Text>
-        </TouchableOpacity>
-      </SafeAreaView>
-    </SafeAreaProvider>
+      <TouchableOpacity
+        onPress={goToSignUp}
+        disabled={loading}
+        style={{ marginTop: 20 }}
+      >
+        <Text style={[styles.linkText, loading && { opacity: 0.5 }]}>
+          Don't have an account?{" "}
+          <Text style={{ fontWeight: "bold" }}>Sign Up</Text>
+        </Text>
+      </TouchableOpacity>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+  },
   title: {
     fontSize: 28,
     fontWeight: "bold",
-    marginVertical: 20,
+    marginBottom: 30,
     textAlign: "center",
   },
   input: {
     height: 50,
     borderColor: "#ccc",
     borderWidth: 1,
-    marginVertical: 10,
-    borderRadius: 10,
-    paddingHorizontal: 15,
+    marginVertical: 12,
+    borderRadius: 8,
+    paddingHorizontal: 16,
     fontSize: 16,
   },
   button: {
     backgroundColor: "#007AFF",
-    padding: 15,
-    borderRadius: 10,
+    paddingVertical: 14,
+    borderRadius: 8,
     marginTop: 20,
+    alignItems: "center",
+  },
+  buttonDisabled: {
+    opacity: 0.6,
   },
   buttonText: {
-    textAlign: "center",
-    color: "white",
-    fontWeight: "bold",
+    color: "#fff",
+    fontWeight: "600",
     fontSize: 18,
+  },
+  linkText: {
+    textAlign: "center",
+    color: "#007AFF",
+    fontSize: 16,
   },
 });
