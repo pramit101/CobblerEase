@@ -153,7 +153,7 @@ export default function CartScreen() {
 
             <TouchableOpacity onPress={handleSubmitOrder} disabled={!user}>
               <Text style={[styles.Submitbutton, !user && { opacity: 0.5 }]}>
-                {user ? "SUBMIT ORDER" : "Login to Submit Order"}
+                {user ? "SUBMIT ORDER" : "Login to Submit"}
               </Text>
             </TouchableOpacity>
           </View>

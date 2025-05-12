@@ -76,7 +76,7 @@ export default function HomeScreen() {
                 onPress={handleNamePress}
                 style={{
                   marginTop: -15,
-                  backgroundColor: "#007AFF",
+                  backgroundColor: "brown",
                   padding: 10,
                   borderRadius: 5,
                   alignSelf: "center",
@@ -91,7 +91,7 @@ export default function HomeScreen() {
                 <TouchableOpacity
                   onPress={() => router.push("../login_page")}
                   style={{
-                    backgroundColor: "#007AFF",
+                    backgroundColor: "brown",
                     padding: 10,
                     borderRadius: 5,
                     marginBottom: 10,
@@ -110,7 +110,7 @@ export default function HomeScreen() {
                 <TouchableOpacity
                   onPress={() => router.push("../signup_page")}
                   style={{
-                    backgroundColor: "#007AFF",
+                    backgroundColor: "brown",
                     padding: 10,
                     borderRadius: 5,
                   }}
