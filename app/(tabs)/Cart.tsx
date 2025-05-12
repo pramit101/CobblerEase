@@ -1,13 +1,7 @@
 // app/(tabs)/Cart.tsx
 
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Alert,
-  ScrollView,
-} from "react-native";
+import { View, Text, TouchableOpacity, Alert, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
@@ -17,14 +11,14 @@ import {
   clearData,
   removeItem,
   removeServiceItem,
-} from "../../helperFiles/storage";   // ← two levels up
+} from "../../helperFiles/storage";
 
 import { onAuthStateChanged, User } from "firebase/auth";
-import { auth } from "../../firebase";            // ← two levels up
-import { saveOrder } from "../../src/orders";     // ← two levels up into src
+import { auth } from "../../firebase";
+import { saveOrder } from "../../src/orders";
 import { router } from "expo-router";
 
-import { styles } from "../../Styles/cart";       // ← two levels up
+import { styles } from "../../Styles/cart";
 
 export default function CartScreen() {
   const [my_items, setMyItems] = useState<any[]>([]);
@@ -55,10 +49,7 @@ export default function CartScreen() {
           { text: "Cancel" },
           {
             text: "Login",
-            onPress: () =>
-              router.push(
-                `/LoginPage?redirect=${encodeURIComponent("/Cart")}`
-              ),
+            onPress: () => router.push("../login_page"),
           },
         ]
       );
@@ -67,7 +58,7 @@ export default function CartScreen() {
 
     const orderPayload = {
       customerName: user.email || "Guest",
-      items: my_items.map(item => ({
+      items: my_items.map((item) => ({
         productId: item.id,
         quantity: 1,
         price: Number(item.price),
@@ -80,7 +71,7 @@ export default function CartScreen() {
       const id = await saveOrder(orderPayload);
       Alert.alert("Order submitted!", `Your order ID is ${id}`);
       clearDataHandler();
-      router.replace("/");  // back home
+      router.replace("/"); // back home
     } catch (err) {
       console.error(err);
       Alert.alert("Error", "Could not submit order.");
@@ -116,8 +107,8 @@ export default function CartScreen() {
                 <TouchableOpacity
                   onPress={async () => {
                     await removeItem(item.name);
-                    setMyItems(prev =>
-                      prev.filter(p => p.name !== item.name)
+                    setMyItems((prev) =>
+                      prev.filter((p) => p.name !== item.name)
                     );
                   }}
                   style={styles.removeButton}
@@ -143,8 +134,8 @@ export default function CartScreen() {
                 <TouchableOpacity
                   onPress={async () => {
                     await removeServiceItem(svc.name);
-                    setMyServices(prev =>
-                      prev.filter(s => s.name !== svc.name)
+                    setMyServices((prev) =>
+                      prev.filter((s) => s.name !== svc.name)
                     );
                   }}
                   style={styles.removeButton}
@@ -161,12 +152,7 @@ export default function CartScreen() {
             </TouchableOpacity>
 
             <TouchableOpacity onPress={handleSubmitOrder} disabled={!user}>
-              <Text
-                style={[
-                  styles.Submitbutton,
-                  !user && { opacity: 0.5 },
-                ]}
-              >
+              <Text style={[styles.Submitbutton, !user && { opacity: 0.5 }]}>
                 {user ? "SUBMIT ORDER" : "Login to Submit Order"}
               </Text>
             </TouchableOpacity>

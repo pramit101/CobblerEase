@@ -32,8 +32,7 @@ export default function LoginPage() {
     signInWithEmailAndPassword(auth, email.trim(), password)
       .then(({ user }) => {
         Alert.alert("Success", "Logged in successfully!");
-        const target = redirect ?? "/";
-        router.replace(target);
+        router.replace("/");
       })
       .catch((error) => {
         Alert.alert("Login failed", error.message);
@@ -44,10 +43,7 @@ export default function LoginPage() {
   };
 
   const goToSignUp = () => {
-    const signupPath = redirect
-      ? `/signup_page?redirect=${encodeURIComponent(redirect)}`
-      : "/signup_page";
-    router.push(signupPath);
+    router.push("./signup_page");
   };
 
   return (
