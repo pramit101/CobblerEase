@@ -66,17 +66,17 @@ export default function HomeScreen() {
               source={require("../../assets/images/main_logo.png")}
               style={{ width: "50%", height: 200 }}
             />
-            <Text style={{ fontWeight: "300", fontSize: 25, marginBottom: 10 }}>
+            <Text style={{ fontWeight: "500", fontSize: 25, marginBottom: 10 }}>
               |
             </Text>
 
-            {/* ✅ Show name button or Login/Signup options */}
+            {/* Show name button or Login/Signup options */}
             {userName ? (
               <TouchableOpacity
                 onPress={handleNamePress}
                 style={{
-                  marginTop: 10,
-                  backgroundColor: "#007AFF",
+                  marginTop: -15,
+                  backgroundColor: "brown",
                   padding: 10,
                   borderRadius: 5,
                   alignSelf: "center",
@@ -87,11 +87,11 @@ export default function HomeScreen() {
                 </Text>
               </TouchableOpacity>
             ) : (
-              <View style={{ marginTop: 10 }}>
+              <View>
                 <TouchableOpacity
                   onPress={() => router.push("../login_page")}
                   style={{
-                    backgroundColor: "#007AFF",
+                    backgroundColor: "brown",
                     padding: 10,
                     borderRadius: 5,
                     marginBottom: 10,
@@ -110,7 +110,7 @@ export default function HomeScreen() {
                 <TouchableOpacity
                   onPress={() => router.push("../signup_page")}
                   style={{
-                    backgroundColor: "#007AFF",
+                    backgroundColor: "brown",
                     padding: 10,
                     borderRadius: 5,
                   }}
@@ -145,6 +145,12 @@ export default function HomeScreen() {
                   />
                 </MapView>
               </View>
+              <Text style={styleText.body_text}>
+                Feel free to contact us the old-fashioned way on: 0412234455 or
+                email us at cobblerEaseMelbourne@gmail.com. Our website provides
+                a modern and convenient way to book your shoe repairs and select
+                from our wide range of products online.
+              </Text>
             </View>
           </ScrollView>
         </View>

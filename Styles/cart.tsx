@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "#e1edd5",
     width: "90%",
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "center",
   },

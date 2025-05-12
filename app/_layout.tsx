@@ -44,6 +44,14 @@ export default function RootLayout() {
             <Stack.Screen name="+not-found" />
             <Stack.Screen name="login_page" options={{ headerShown: true }} />
             <Stack.Screen name="signup_page" options={{ headerShown: true }} />
+            <Stack.Screen
+              name="product_form"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="service_form"
+              options={{ headerShown: false }}
+            />
           </Stack>
           <StatusBar style="auto" />
         </ThemeProvider>

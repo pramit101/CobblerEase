@@ -1,31 +1,37 @@
-import { View, Text, Button, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react";
+// app/(tabs)/Cart.tsx
+
+import React, { useState, useEffect } from "react";
+import { View, Text, TouchableOpacity, Alert, ScrollView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+
 import {
-  saveData,
   retrieveData,
-  save_service_data,
   retrieve_service_data,
   clearData,
   removeItem,
   removeServiceItem,
 } from "../../helperFiles/storage";
-import { styles } from "../../Styles/cart";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { ScrollView } from "react-native-gesture-handler";
 
-const cart = () => {
+import { onAuthStateChanged, User } from "firebase/auth";
+import { auth } from "../../firebase";
+import { saveOrder } from "../../src/orders";
+import { router } from "expo-router";
+
+import { styles } from "../../Styles/cart";
+
+export default function CartScreen() {
   const [my_items, setMyItems] = useState<any[]>([]);
   const [my_services, setMyServices] = useState<any[]>([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await retrieveData();
-      const services = await retrieve_service_data();
-      setMyServices(services);
-      setMyItems(data);
-    };
+  const [user, setUser] = useState<User | null>(null);
 
-    fetchData();
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, setUser);
+    (async () => {
+      setMyItems(await retrieveData());
+      setMyServices(await retrieve_service_data());
+    })();
+    return unsub;
   }, []);
 
   const clearDataHandler = async () => {
@@ -34,16 +40,48 @@ const cart = () => {
     setMyServices([]);
   };
 
+  const handleSubmitOrder = async () => {
+    if (!user) {
+      Alert.alert(
+        "Login Required",
+        "You need to log in to submit your order.",
+        [
+          { text: "Cancel" },
+          {
+            text: "Login",
+            onPress: () => router.push("../login_page"),
+          },
+        ]
+      );
+      return;
+    }
+
+    const orderPayload = {
+      customerName: user.email || "Guest",
+      items: my_items.map((item) => ({
+        productId: item.id,
+        quantity: 1,
+        price: Number(item.price),
+      })),
+      totalPrice: my_items.reduce((sum, i) => sum + Number(i.price), 0),
+      services: my_services,
+    };
+
+    try {
+      const id = await saveOrder(orderPayload);
+      Alert.alert("Order submitted!", `Your order ID is ${id}`);
+      clearDataHandler();
+      router.replace("/"); // back home
+    } catch (err) {
+      console.error(err);
+      Alert.alert("Error", "Could not submit order.");
+    }
+  };
+
   const tabBarHeight = useBottomTabBarHeight();
-  // Get the height of the tab bar so that we can adjust the padding of the service list
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: "#f5f5f5",
-      }}
-    >
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
       <ScrollView>
         <View
           style={{
@@ -59,75 +97,68 @@ const cart = () => {
               No Products added to the Cart
             </Text>
           ) : (
-            my_items.map((item, index) => (
-              <View key={index} style={styles.productItem}>
+            my_items.map((item, idx) => (
+              <View key={idx} style={styles.productItem}>
                 <View>
                   <Text style={{ fontSize: 10 }}>{"#" + item.id}</Text>
                   <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
                   <Text style={{ color: "green" }}>${item.price}</Text>
                 </View>
-                <View>
-                  <TouchableOpacity
-                    onPress={async () => {
-                      await removeItem(item.name);
-                      setMyItems((prevItems) =>
-                        prevItems.filter(
-                          (product) => product.name !== item.name
-                        )
-                      );
-                    }}
-                    style={styles.removeButton}
-                  >
-                    <Text style={styles.removeButtonText}>x</Text>
-                  </TouchableOpacity>
-                </View>
+                <TouchableOpacity
+                  onPress={async () => {
+                    await removeItem(item.name);
+                    setMyItems((prev) =>
+                      prev.filter((p) => p.name !== item.name)
+                    );
+                  }}
+                  style={styles.removeButton}
+                >
+                  <Text style={styles.removeButtonText}>×</Text>
+                </TouchableOpacity>
               </View>
             ))
           )}
-          <Text style={styles.heading}> Services </Text>
+
+          <Text style={styles.heading}>Services</Text>
           {my_services.length === 0 ? (
             <Text style={{ fontSize: 20, textAlign: "center", margin: 50 }}>
               No Services added to the Cart
             </Text>
           ) : (
-            my_services.map((item, index) => (
-              <View key={index} style={styles.serviceItem}>
-                <View style={{ width: "80%" }}>
-                  <Text style={{ fontWeight: "bold", marginBottom: 10 }}>
-                    {item.name}
-                  </Text>
-                  <Text style={{}}>{item.description}</Text>
-                </View>
-                <View>
-                  <TouchableOpacity
-                    onPress={async () => {
-                      await removeServiceItem(item.name);
-                      setMyServices((prevItems) =>
-                        prevItems.filter(
-                          (service) => service.name !== item.name
-                        )
-                      );
-                    }}
-                    style={styles.removeButton}
-                  >
-                    <Text style={styles.removeButtonText}>x</Text>
-                  </TouchableOpacity>
-                </View>
+            my_services.map((svc, idx) => (
+              <View key={idx} style={styles.serviceItem}>
+                <Text style={{ fontWeight: "bold", marginBottom: 10 }}>
+                  {svc.name}
+                </Text>
+                <Text>{svc.description}</Text>
+                <TouchableOpacity
+                  onPress={async () => {
+                    await removeServiceItem(svc.name);
+                    setMyServices((prev) =>
+                      prev.filter((s) => s.name !== svc.name)
+                    );
+                  }}
+                  style={styles.removeButton}
+                >
+                  <Text style={styles.removeButtonText}>×</Text>
+                </TouchableOpacity>
               </View>
             ))
           )}
+
           <View style={styles.buttonView}>
             <TouchableOpacity onPress={clearDataHandler}>
               <Text style={styles.Clearbutton}>CLEAR CART</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => {}}>
-              <Text style={styles.Submitbutton}>SUBMIT ORDER</Text>
+
+            <TouchableOpacity onPress={handleSubmitOrder} disabled={!user}>
+              <Text style={[styles.Submitbutton, !user && { opacity: 0.5 }]}>
+                {user ? "SUBMIT ORDER" : "Login to Submit"}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
-};
-
-export default cart;
+}
