@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Button, Alert } from "react-native";
 import { onAuthStateChanged, User } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth } from "../../firebase";
 import { saveOrder, OrderItem } from "../orders";
 
 type CheckoutScreenProps = {
