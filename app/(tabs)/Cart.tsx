@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Alert, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-
 import {
   retrieveData,
   retrieve_service_data,
@@ -12,13 +11,30 @@ import {
   removeItem,
   removeServiceItem,
 } from "../../helperFiles/storage";
-
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "../../firebase";
-import { saveOrder } from "../../src/orders";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
-
 import { styles } from "../../Styles/cart";
+
+// Generate and Save Order to Storage
+const saveOrder = async (orderDetails) => {
+  const orderId = "ORD" + Math.floor(10000 + Math.random() * 90000);
+  const placedDate = new Date().toISOString().split("T")[0];
+  const newOrder = {
+    id: orderId,
+    ...orderDetails,
+    date: placedDate,
+    status: "Placed",
+    estimated: "2025-05-17", // You can make this dynamic later
+  };
+
+  const existingOrders = await AsyncStorage.getItem("@orders");
+  const orders = existingOrders ? JSON.parse(existingOrders) : [];
+  orders.push(newOrder);
+  await AsyncStorage.setItem("@orders", JSON.stringify(orders));
+  return orderId;
+};
 
 export default function CartScreen() {
   const [my_items, setMyItems] = useState<any[]>([]);
