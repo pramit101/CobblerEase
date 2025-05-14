@@ -1,7 +1,9 @@
+// This layout is used for the tab navigation inside the CobblerEase app.
+// Includes tabs for Home, Products, Services, Track Order, and Cart.
 import { Tabs } from "expo-router";
 import React from "react";
 import { Platform } from "react-native";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons"; // Icons used from FontAwesome5
 
 import { HapticTab } from "@/components/HapticTab";
 import { IconSymbol } from "@/components/ui/IconSymbol";
