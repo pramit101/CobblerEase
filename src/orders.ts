@@ -1,10 +1,11 @@
 // src/orders.ts
 import {
   collection,
-  addDoc,
+  setDoc,
+  doc,
   serverTimestamp,
 } from "firebase/firestore";
-import { db } from "../firebase";    // ← go up one level, not same folder
+import { db } from "../firebase";   
 
 // Define the shape of an order item
 export interface OrderItem {
@@ -13,6 +14,7 @@ export interface OrderItem {
   price: number;
 }
 
+const orderId = "ORD" + Math.floor(Math.random() * 1000000).toString(); // Generate a random order ID
 // Define the shape of an order
 export interface Order {
   customerName: string;
@@ -32,7 +34,9 @@ export async function saveOrder(
   const withTs = {
     ...order,
     createdAt: serverTimestamp(),
+    status: "Placed", // Default status
+    estimated: "Pending Confirmation", // 7 days from now
   };
-  const ref = await addDoc(collection(db, "orders"), withTs);
-  return ref.id;
+  const ref = await setDoc(doc(db, "orders", orderId), withTs);
+  return orderId
 }

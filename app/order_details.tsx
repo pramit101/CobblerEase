@@ -22,13 +22,13 @@ export default function OrderDetails() {
         <View style={styles.card}>
           <Text style={styles.header}>Order Summary</Text>
           <Text style={styles.item}>
-            <Text style={styles.label}>Order ID:</Text> {order.id}
+            <Text style={styles.label}>Order ID:</Text> {params.id}
           </Text>
           <Text style={styles.item}>
-            <Text style={styles.label}>Placed:</Text> {order.date}
+            <Text style={styles.label}>Placed:</Text> {params.date}
           </Text>
           <Text style={styles.item}>
-            <Text style={styles.label}>Estimated Delivery:</Text>{" "}
+            <Text style={styles.label}>Estimated Collection:</Text>{" "}
             {order.estimated}
           </Text>
           <Text style={styles.item}>
@@ -43,32 +43,30 @@ export default function OrderDetails() {
 
           {/* Progress Bar inside details page */}
           <View style={styles.progressContainer}>
-            {["Placed", "Processing", "Out for Delivery", "Delivered"].map(
-              (step, index) => (
-                <View key={step} style={styles.step}>
-                  <View
-                    style={[
-                      styles.circle,
-                      step === order.status ||
-                      index < getStatusIndex(order.status)
-                        ? styles.activeCircle
-                        : null,
-                    ]}
-                  />
-                  <Text
-                    style={[
-                      styles.label,
-                      step === order.status ||
-                      index < getStatusIndex(order.status)
-                        ? styles.activeLabel
-                        : null,
-                    ]}
-                  >
-                    {step}
-                  </Text>
-                </View>
-              )
-            )}
+            {["Placed", "Processing", "Pickup"].map((step, index) => (
+              <View key={step} style={styles.step}>
+                <View
+                  style={[
+                    styles.circle,
+                    step === order.status ||
+                    index < getStatusIndex(order.status)
+                      ? styles.activeCircle
+                      : null,
+                  ]}
+                />
+                <Text
+                  style={[
+                    styles.label,
+                    step === order.status ||
+                    index < getStatusIndex(order.status)
+                      ? styles.activeLabel
+                      : null,
+                  ]}
+                >
+                  {step}
+                </Text>
+              </View>
+            ))}
           </View>
         </View>
 

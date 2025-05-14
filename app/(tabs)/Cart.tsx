@@ -14,11 +14,13 @@ import {
 } from "../../helperFiles/storage";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "../../firebase";
+import { saveOrder } from "../../src/orders";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { styles } from "../../Styles/cart";
 
-// Generate and Save Order to Storage
+{
+  /*}
 const saveOrder = async (orderDetails) => {
   const orderId = "ORD" + Math.floor(10000 + Math.random() * 90000);
   const placedDate = new Date().toISOString().split("T")[0];
@@ -37,7 +39,8 @@ const saveOrder = async (orderDetails) => {
   await AsyncStorage.setItem("@orders", JSON.stringify(orders));
   return orderId;
 };
-
+*/
+}
 export default function CartScreen() {
   const [my_items, setMyItems] = useState<any[]>([]);
   const [my_services, setMyServices] = useState<any[]>([]);
