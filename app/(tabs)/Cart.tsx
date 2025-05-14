@@ -1,4 +1,5 @@
-// app/(tabs)/Cart.tsx
+// The shopping cart screen
+// Uses local storage to store the cart items and has main link with the database
 
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Alert, ScrollView } from "react-native";
@@ -13,11 +14,13 @@ import {
 } from "../../helperFiles/storage";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "../../firebase";
+import { saveOrder } from "../../src/orders";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { styles } from "../../Styles/cart";
 
-// Generate and Save Order to Storage
+{
+  /*}
 const saveOrder = async (orderDetails) => {
   const orderId = "ORD" + Math.floor(10000 + Math.random() * 90000);
   const placedDate = new Date().toISOString().split("T")[0];
@@ -26,21 +29,25 @@ const saveOrder = async (orderDetails) => {
     ...orderDetails,
     date: placedDate,
     status: "Placed",
-    estimated: "2025-05-17", // You can make this dynamic later
+    estimated: "2025-05-17",
   };
 
+  // Save to AsyncStorage
   const existingOrders = await AsyncStorage.getItem("@orders");
   const orders = existingOrders ? JSON.parse(existingOrders) : [];
   orders.push(newOrder);
   await AsyncStorage.setItem("@orders", JSON.stringify(orders));
   return orderId;
 };
-
+*/
+}
 export default function CartScreen() {
   const [my_items, setMyItems] = useState<any[]>([]);
   const [my_services, setMyServices] = useState<any[]>([]);
   const [user, setUser] = useState<User | null>(null);
 
+  // Fetch user data and cart items from local storage and display after rendering
+  // This is done using the useEffect hook
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, setUser);
     (async () => {
@@ -50,6 +57,7 @@ export default function CartScreen() {
     return unsub;
   }, []);
 
+  // Clear cart data
   const clearDataHandler = async () => {
     await clearData();
     setMyItems([]);
@@ -59,7 +67,7 @@ export default function CartScreen() {
   const handleSubmitOrder = async () => {
     if (!user) {
       Alert.alert(
-        "Login Required",
+        "Login Required", // Login is required to submit the order
         "You need to log in to submit your order.",
         [
           { text: "Cancel" },
@@ -72,6 +80,7 @@ export default function CartScreen() {
       return;
     }
 
+    // create order item list to store in the database
     const orderPayload = {
       customerName: user.email || "Guest",
       items: my_items.map((item) => ({
@@ -108,7 +117,8 @@ export default function CartScreen() {
           }}
         >
           <Text style={styles.heading}>Products</Text>
-          {my_items.length === 0 ? (
+          {my_items.length === 0 ? ( // Conditional display of products and services
+            // If there are no products or services, display a message
             <Text style={{ fontSize: 20, textAlign: "center", margin: 50 }}>
               No Products added to the Cart
             </Text>
@@ -134,7 +144,6 @@ export default function CartScreen() {
               </View>
             ))
           )}
-
           <Text style={styles.heading}>Services</Text>
           {my_services.length === 0 ? (
             <Text style={{ fontSize: 20, textAlign: "center", margin: 50 }}>

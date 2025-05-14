@@ -1,5 +1,3 @@
-// src/screens/LoginPage.tsx
-
 import React, { useState } from "react";
 import {
   View,
@@ -14,21 +12,24 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import { router, useLocalSearchParams } from "expo-router";
+import { styles } from "../Styles/login"; // Getting the style from Styles folder
 
 export default function LoginPage() {
+  // Declaration of useState hooks for managing state variables
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const { redirect } = useLocalSearchParams<{ redirect?: string }>();
 
+  // Function to handle login
   const handleLogin = () => {
     if (!email.trim() || !password) {
       Alert.alert("Missing fields", "Please enter both email and password.");
       return;
     }
     setLoading(true);
-
+    // Use of firebase auth to sign in with email and password
     signInWithEmailAndPassword(auth, email.trim(), password)
       .then(({ user }) => {
         Alert.alert("Success", "Logged in successfully!");
@@ -94,47 +95,3 @@ export default function LoginPage() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: "#fff",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    marginBottom: 30,
-    textAlign: "center",
-  },
-  input: {
-    height: 50,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    marginVertical: 12,
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    fontSize: 16,
-  },
-  button: {
-    backgroundColor: "#007AFF",
-    paddingVertical: 14,
-    borderRadius: 8,
-    marginTop: 20,
-    alignItems: "center",
-  },
-  buttonDisabled: {
-    opacity: 0.6,
-  },
-  buttonText: {
-    color: "#fff",
-    fontWeight: "600",
-    fontSize: 18,
-  },
-  linkText: {
-    textAlign: "center",
-    color: "#007AFF",
-    fontSize: 16,
-  },
-});
