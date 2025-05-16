@@ -1,3 +1,4 @@
+// This is a signup page for a React Native app using Expo Router and Firebase Authentication.
 import {
   View,
   Text,
@@ -22,14 +23,16 @@ export default function Signup_page() {
       Alert.alert("Error", "Please enter your full name");
       return;
     }
-
+    {
+      /* Standard syntax for firebase auth used*/
+    }
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         const user = userCredential.user;
         await updateProfile(user, { displayName: fullName });
 
         Alert.alert("Success", "Account created!");
-        router.replace("/"); // ✅ After signup, go to Home
+        router.replace("/"); // After signup, go to Home
       })
       .catch((error) => {
         console.error("Signup error:", error);

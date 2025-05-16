@@ -14,7 +14,6 @@ export interface OrderItem {
   price: number;
 }
 
-const orderId = "ORD" + Math.floor(Math.random() * 1000000).toString(); // Generate a random order ID
 // Define the shape of an order
 export interface Order {
   customerName: string;
@@ -31,6 +30,8 @@ export interface Order {
 export async function saveOrder(
   order: Omit<Order, "createdAt">
 ): Promise<string> {
+  const orderId = "ORD" + Math.floor(Math.random() * 1000000).toString(); // Generate a random order ID
+
   const withTs = {
     ...order,
     createdAt: serverTimestamp(),
@@ -39,4 +40,21 @@ export async function saveOrder(
   };
   const ref = await setDoc(doc(db, "orders", orderId), withTs);
   return orderId
+}
+export async function saveProducts(
+  name, id
+) {
+  const withTs = {
+    name: name,
+  };
+  const ref = await setDoc(doc(db, "products", id), withTs);
+}
+export async function saveServices(
+  name, description , id
+) {
+  const withTs = {
+    name: name,
+    description: description,
+  };
+  const ref = await setDoc(doc(db, "services", id), withTs);
 }

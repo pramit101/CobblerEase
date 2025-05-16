@@ -24,6 +24,7 @@ export const retrieveData = async () => {
 };
 
 export const save_service_data = async (service: {
+  id: string;
   name: string;
   description: string;
 }) => {

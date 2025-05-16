@@ -1,3 +1,4 @@
+// Neatly displays the image and details of the product and reduces clutter in the main page
 import { View, Text, Image, ImageSourcePropType } from "react-native";
 import React from "react";
 import { products } from "../data/products";

@@ -1,13 +1,7 @@
 // src/screens/product_form.tsx
 
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  Image,
-  Alert,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, Image, Alert, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams, router } from "expo-router";
 import { saveData } from "../helperFiles/storage";
@@ -37,7 +31,8 @@ export default function ProductForm() {
   const handleAdd = () => {
     if (!user) {
       // Build a redirect back to this exact product page
-      const redirectPath = `/product_form?` +
+      const redirectPath =
+        `/product_form?` +
         `product_id=${encodeURIComponent(product_id)}` +
         `&product_name=${encodeURIComponent(product_name)}` +
         `&product_image=${encodeURIComponent(product_image)}` +
@@ -51,8 +46,7 @@ export default function ProductForm() {
           { text: "Cancel" },
           {
             text: "Login",
-            onPress: () =>
-              router.push(`/Login_page?redirect=${encodeURIComponent(redirectPath)}`),
+            onPress: () => router.push("./login_page)"),
           },
         ]
       );
@@ -76,7 +70,7 @@ export default function ProductForm() {
           style={{ width: "70%", height: 200, borderWidth: 2 }}
           resizeMode="stretch"
         />
-
+        {/* Display user's selection*/}
         <Text style={styles.textHeader}>Product ID: {product_id}</Text>
         <Text style={styles.textHeader}>Product Name</Text>
         <Text style={styles.myText}>{product_name}</Text>
@@ -88,10 +82,12 @@ export default function ProductForm() {
         <View style={styles.buttons_view}>
           <TouchableOpacity onPress={handleAdd} disabled={!user}>
             <Text style={[styles.buttons, !user && { opacity: 0.5 }]}>
-              {user ? "Add to Cart" : "Login to Add to Cart"}
+              {user ? "Add to Cart" : "Login to Add to Cart"}{" "}
+              {/* Different message based on user auth state*/}
             </Text>
           </TouchableOpacity>
 
+          {/*Return to cart*/}
           <TouchableOpacity onPress={() => router.push("/(tabs)/Cart")}>
             <Text style={styles.buttons}>View Cart</Text>
           </TouchableOpacity>

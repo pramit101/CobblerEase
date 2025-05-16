@@ -60,6 +60,7 @@ export default function ServicesScreen() {
                   router.push({
                     pathname: "/service_form",
                     params: {
+                      service_id: item.service_id,
                       service_name: item.service_name,
                       service_description: item.service_description,
                       service_image: item.service_image,

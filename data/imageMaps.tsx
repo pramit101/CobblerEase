@@ -1,3 +1,4 @@
+// image map used as image could not be transferred between app pages using params.
 export const imageMap: Record<string, any> = {
   "shoe_polish.jpeg": require("../assets/images/shoe_polish.jpeg"),
   "toolSet.jpeg": require("../assets/images/toolSet.jpeg"),

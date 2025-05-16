@@ -1,11 +1,26 @@
+//This page adds the order details to the UI for the user to see
+// Has tranlation feature using fireBase translate extention
 import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Picker } from "@react-native-picker/picker";
+import { useState } from "react";
 
 export default function OrderDetails() {
+  // Get the order details from the URL parameters
+  // This is done using the useLocalSearchParams hook
+  // The order details are passed as JSON strings in the URL
   const params = useLocalSearchParams();
   const order = params?.order ? JSON.parse(params.order.toString()) : null;
+  const service = params?.services
+    ? JSON.parse(params.services.toString())
+    : null;
+  const product = params?.products
+    ? JSON.parse(params.products.toString())
+    : null;
+  const [selectedLanguage, setSelectedLanguage] = useState("en");
 
+  // Check if the order is null
   if (!order) {
     return (
       <SafeAreaView
@@ -72,28 +87,62 @@ export default function OrderDetails() {
 
         <View style={styles.card}>
           <Text style={styles.subheader}>Items</Text>
-          {order.items?.map((i, idx) => (
-            <Text key={idx} style={styles.listItem}>
-              • {i.productId} - ${i.price}
-            </Text>
-          ))}
+          <View style={styles.rowAlign}>
+            {/* Take each item and display separately according to translation */}
+            <View>
+              {product.map((i, idx) => (
+                <Text key={idx} style={styles.listItem}>
+                  • {i.translated[selectedLanguage]}
+                </Text>
+              ))}
+            </View>
+            <View>
+              {order.items?.map((i, idx) => (
+                <Text key={idx} style={styles.listItem}>
+                  - ${i.price}
+                </Text>
+              ))}
+            </View>
+          </View>
         </View>
-
+        {/* Take the service array from params and use it to display translated name and description*/}
         <View style={styles.card}>
           <Text style={styles.subheader}>Services</Text>
-          {order.services?.length > 0 ? (
-            order.services.map((s, idx) => (
+          {service.length > 0 ? (
+            service.map((s, idx) => (
               <Text key={idx} style={styles.listItem}>
-                • {s.name}
+                <Text style={{ fontWeight: "bold" }}>
+                  {s.name_translated[selectedLanguage]} -
+                </Text>
+                <Text> {s.translated[selectedLanguage]}</Text>
               </Text>
             ))
           ) : (
             <Text style={styles.listItem}>No Services</Text>
           )}
         </View>
+        <Text style={{ color: "red" }}>
+          Can't see the items or services? Go back and press the "Track order"
+          button again.
+        </Text>
+        <Picker
+          selectedValue={selectedLanguage}
+          onValueChange={(itemValue) => setSelectedLanguage(itemValue)}
+          style={{}}
+        >
+          {/* Picker extention used for language selection*/}
+          <Picker.Item label="English" value="en" />
+          <Picker.Item label="Français" value="fr" />
+          <Picker.Item label="Español" value="es" />
+          <Picker.Item label="Deutsch" value="de" />
+        </Picker>
       </ScrollView>
     </SafeAreaView>
   );
+}
+
+{
+  /* Status bar options*/
 }
 
 const getStatusIndex = (status) => {
@@ -130,4 +179,8 @@ const styles = StyleSheet.create({
   activeCircle: { backgroundColor: "#4caf50" },
   labelText: { marginTop: 5, fontSize: 12, color: "#999", textAlign: "center" },
   activeLabel: { color: "#4caf50", fontWeight: "600" },
+  rowAlign: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
 });

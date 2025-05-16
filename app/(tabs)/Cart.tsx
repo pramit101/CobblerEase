@@ -14,33 +14,11 @@ import {
 } from "../../helperFiles/storage";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "../../firebase";
-import { saveOrder } from "../../src/orders";
+import { saveOrder, saveServices, saveProducts } from "../../src/orders";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { styles } from "../../Styles/cart";
 
-{
-  /*}
-const saveOrder = async (orderDetails) => {
-  const orderId = "ORD" + Math.floor(10000 + Math.random() * 90000);
-  const placedDate = new Date().toISOString().split("T")[0];
-  const newOrder = {
-    id: orderId,
-    ...orderDetails,
-    date: placedDate,
-    status: "Placed",
-    estimated: "2025-05-17",
-  };
-
-  // Save to AsyncStorage
-  const existingOrders = await AsyncStorage.getItem("@orders");
-  const orders = existingOrders ? JSON.parse(existingOrders) : [];
-  orders.push(newOrder);
-  await AsyncStorage.setItem("@orders", JSON.stringify(orders));
-  return orderId;
-};
-*/
-}
 export default function CartScreen() {
   const [my_items, setMyItems] = useState<any[]>([]);
   const [my_services, setMyServices] = useState<any[]>([]);
@@ -85,6 +63,7 @@ export default function CartScreen() {
       customerName: user.email || "Guest",
       items: my_items.map((item) => ({
         productId: item.id,
+        name: item.name,
         quantity: 1,
         price: Number(item.price),
       })),
@@ -93,6 +72,15 @@ export default function CartScreen() {
     };
 
     try {
+      {
+        /*}
+      for (const s of my_services) {
+        await saveServices(s.name, s.description, s.id);
+      }
+      for (const p of my_items) {
+        await saveProducts(p.name, p.id);
+      }*/
+      }
       const id = await saveOrder(orderPayload);
       Alert.alert("Order submitted!", `Your order ID is ${id}`);
       clearDataHandler();

@@ -1,3 +1,4 @@
+// Display the form with detailed image, name and description of the service
 import {
   View,
   Text,
@@ -19,8 +20,9 @@ import { router } from "expo-router";
 import { styles } from "../Styles/products_form";
 import { imageMap } from "../data/imageMaps";
 
+// using params to get the service details
 const service_form = () => {
-  const { service_name, service_image, service_description } =
+  const { service_id, service_name, service_image, service_description } =
     useLocalSearchParams();
 
   return (
@@ -43,10 +45,14 @@ const service_form = () => {
                 "The service has been added to your cart"
               );
               save_service_data({
+                id: service_id.toString(),
                 name: service_name.toString(),
                 description: service_description.toString(),
               });
               router.push("/(tabs)/services");
+              {
+                /* Return to service page once user added an item*/
+              }
             }}
           >
             <Text style={styles.buttons}>Add to cart </Text>

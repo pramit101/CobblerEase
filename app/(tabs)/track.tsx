@@ -18,11 +18,41 @@ import { localStyles } from "../../Styles/track";
 export default function TrackPage() {
   const [trackId, setTrackId] = useState("");
   const [foundOrder, setFoundOrder] = useState(null);
+  const [foundService, setFoundService] = useState<string[]>([]);
+  const [foundProduct, setFoundProduct] = useState<string[]>([]);
   const [error, setError] = useState("");
 
   async function getOrderById(orderId: string) {
     try {
       const ref = doc(db, "orders", orderId);
+      const snap = await getDoc(ref);
+      if (snap.exists()) {
+        return snap.data();
+      } else {
+        return null; // Return null if the order is not found
+      }
+    } catch (error) {
+      console.log("Error fetching order:", error);
+      throw new Error("Failed to fetch order. Please try again later.");
+    }
+  }
+  async function getServicesById(serviceId: string) {
+    try {
+      const ref = doc(db, "services", serviceId);
+      const snap = await getDoc(ref);
+      if (snap.exists()) {
+        return snap.data();
+      } else {
+        return null; // Return null if the order is not found
+      }
+    } catch (error) {
+      console.log("Error fetching order:", error);
+      throw new Error("Failed to fetch order. Please try again later.");
+    }
+  }
+  async function getProductsById(ProductId: string) {
+    try {
+      const ref = doc(db, "products", ProductId);
       const snap = await getDoc(ref);
       if (snap.exists()) {
         return snap.data();
@@ -43,6 +73,22 @@ export default function TrackPage() {
     } else {
       setFoundOrder(null);
       setError("Order not found. Please check your Order ID.");
+    }
+
+    const servicePromises = foundOrder.services.map((s) =>
+      getServicesById(s.id)
+    );
+    const serviceDetails = await Promise.all(servicePromises);
+
+    const ProductPromises = foundOrder.items.map((i) =>
+      getProductsById(i.productId)
+    );
+    const ProductDetails = await Promise.all(ProductPromises);
+    if (serviceDetails) {
+      setFoundService(serviceDetails);
+    }
+    if (ProductDetails) {
+      setFoundProduct(ProductDetails);
     }
   };
 
@@ -121,6 +167,8 @@ export default function TrackPage() {
                       pathname: "/order_details",
                       params: {
                         order: JSON.stringify(foundOrder),
+                        services: JSON.stringify(foundService),
+                        products: JSON.stringify(foundProduct),
                         id: trackId,
                         date: foundOrder.createdAt
                           ?.toDate()
