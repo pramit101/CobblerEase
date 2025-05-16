@@ -1,3 +1,4 @@
+// stores all the product data in one place to be imported (mainly in product_form and product page)
 export const products = [
   {
     product_name: "Shoe Polish",

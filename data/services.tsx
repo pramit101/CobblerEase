@@ -1,3 +1,5 @@
+// stores all the services data in one place to be imported (mainly in service_form and service page)
+
 export const services = [
   {
     service_name: "Sole Replacement",
