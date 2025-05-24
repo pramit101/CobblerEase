@@ -74,6 +74,7 @@ export default function LoginPage() {
         style={[styles.button, loading && styles.buttonDisabled]}
         onPress={handleLogin}
         disabled={loading}
+        testID="login-button"
       >
         {loading ? (
           <ActivityIndicator color="#fff" />
